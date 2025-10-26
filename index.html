@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BrightDay - Birthday Reminder Board</title>
+    <meta
+      name="description"
+      content="Keep upcoming birthdays in view with BrightDay. Add, sort, and get reminders for the people you care about."
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="styles/main.css" />
+    <style type="text/tailwindcss" data-teda="tailwind-apply">
+      @layer components {
+        .btn-primary {
+          @apply bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300;
+        }
+        .btn-ghost {
+          @apply bg-white/60 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-lg text-indigo-700 hover:bg-white/80 focus:outline-none;
+        }
+        .card-elevate {
+          @apply bg-white rounded-xl shadow-lg p-6;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="antialiased text-slate-800 bg-gradient-to-b from-sky-50 to-white min-h-screen"
+  >
+    <header
+      class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between"
+    >
+      <a href="index.html" class="flex items-center gap-3 no-underline">
+        <div
+          class="w-10 h-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold"
+        >
+          BD
+        </div>
+        <div class="leading-tight">
+          <div class="text-lg font-semibold">BrightDay</div>
+          <div class="text-xs text-slate-500">Never miss a celebration</div>
+        </div>
+      </a>
+      <nav class="flex items-center gap-3">
+        <a class="btn-ghost" href="#features">Why BrightDay</a>
+        <a class="btn-ghost" href="app.html">Open Board</a>
+      </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+      <!-- Asymmetric hero: large diagonal panel for content, small floating celebration card -->
+      <section aria-labelledby="hero-title" class="relative overflow-visible">
+        <div
+          class="card-elevate"
+          style="clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%)"
+        >
+          <div class="p-6 md:p-12">
+            <h1
+              id="hero-title"
+              class="text-4xl md:text-5xl font-extrabold leading-tight text-slate-900"
+            >
+              See upcoming celebrations at a glance - elegantly.
+            </h1>
+            <p class="mt-4 text-slate-600 max-w-2xl">
+              BrightDay places upcoming birthdays front and center with a clear
+              timeline, helpful reminders, and playful celebration details that
+              bring joy to planning. Fast to use, delightful to look at, and
+              built for every device.
+            </p>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a
+                href="app.html"
+                class="btn-primary inline-flex items-center"
+                aria-label="Open BrightDay board"
+                >Open your board</a
+              >
+              <a href="#features" class="btn-ghost inline-flex items-center"
+                >See features</a
+              >
+            </div>
+
+            <div class="mt-8 text-sm text-slate-500">
+              Tip: Use the Quick Add on the board to capture birthdays in
+              seconds. Data stays in your browser.
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating sample celebration card (30% visual weight), slightly overlapping and rotated for character -->
+        <div
+          id="sampleCard"
+          class="hidden md:block"
+          style="
+            position: absolute;
+            right: -40px;
+            top: 140px;
+            width: 320px;
+            transform: rotate(-6deg);
+          "
+        >
+          <div class="bg-white rounded-2xl shadow-2xl p-5" aria-hidden="true">
+            <div class="flex items-center gap-4">
+              <div
+                class="w-14 h-14 rounded-full sample-initials flex items-center justify-center text-white font-semibold"
+                style="background: #ef4444"
+              >
+                AL
+              </div>
+              <div>
+                <div class="font-medium sample-name">Alice Morgan</div>
+                <div class="text-xs text-slate-500 sample-detail">
+                  June 21 • 3 days
+                </div>
+              </div>
+              <div class="ml-auto text-rose-500 font-bold">🎉</div>
+            </div>
+            <div class="mt-4 text-xs text-slate-500">
+              Add gifts, reminders, or notes right on the card. Quick glance,
+              quick action.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="mt-20 grid gap-8 md:grid-cols-3">
+        <div class="card-elevate">
+          <h3 class="font-semibold text-lg">Instant Overview</h3>
+          <p class="mt-2 text-slate-600 text-sm">
+            A prioritized list shows birthdays ordered by how soon they are.
+            Today and this week are highlighted for fast planning.
+          </p>
+        </div>
+        <div class="card-elevate">
+          <h3 class="font-semibold text-lg">Local Storage</h3>
+          <p class="mt-2 text-slate-600 text-sm">
+            All entries persist in your browser so your board is ready whenever
+            you are. No accounts, no tracking.
+          </p>
+        </div>
+        <div class="card-elevate">
+          <h3 class="font-semibold text-lg">Mobile Friendly</h3>
+          <p class="mt-2 text-slate-600 text-sm">
+            Touch-friendly controls, accessible colors, and smooth
+            micro-interactions make BrightDay comfortable on any device.
+          </p>
+        </div>
+      </section>
+
+      <section class="mt-12">
+        <div
+          class="rounded-xl bg-gradient-to-r from-indigo-50 to-sky-50 p-6 md:p-8 flex items-center gap-6"
+        >
+          <div class="flex-1">
+            <div class="text-sm text-indigo-600 font-semibold">
+              Ready to organize celebrations?
+            </div>
+            <div class="mt-2 text-slate-700">
+              Open the board and add birthdays in seconds. We saved a seat for
+              family, friends, and coworkers.
+            </div>
+          </div>
+          <div class="shrink-0">
+            <a href="app.html" class="btn-primary">Open Board</a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="mt-12 text-sm text-slate-500">
+        Made with care.
+        <a href="https://teda.dev" class="text-indigo-600 hover:underline"
+          >Teda.dev</a
+        >
+        helps build simple apps fast.
+      </footer>
+    </main>
+
+    <script>
+      // Small interactive flourish: subtle confetti dots that respect prefers-reduced-motion
+      ;(function () {
+        try {
+          const reduced = window.matchMedia(
+            '(prefers-reduced-motion: reduce)',
+          ).matches
+          if (reduced) return
+          const container = $('body')
+          for (let i = 0; i < 6; i++) {
+            const dot = $('<div>').css({
+              position: 'fixed',
+              width: 8,
+              height: 8,
+              borderRadius: 4,
+              opacity: 0.9,
+              zIndex: 20,
+            })
+            const colors = ['#F43F5E', '#06B6D4', '#8B5CF6', '#F59E0B']
+            dot.css('background', colors[i % colors.length])
+            const left = 10 + i * 15 + Math.random() * 50
+            dot.css({ left: left + '%', top: 10 + i * 5 + '%' })
+            dot.hide()
+            container.append(dot)
+            dot
+              .delay(400 + i * 150)
+              .fadeIn(600)
+              .animate(
+                { top: '+=20', left: '+=' + (10 + Math.random() * 40) },
+                2400,
+              )
+              .fadeOut(800, function () {
+                $(this).remove()
+              })
+          }
+        } catch (e) {
+          console.warn(e)
+        }
+      })()
+    </script>
+    <script src="scripts/helpers.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/main.js"></script>
+    <script>
+      // Populate the landing page sample card from persisted app data (fallback to a friendly sample)
+      ;(function () {
+        try {
+          // If helpers aren't available, bail
+          if (!window.AppHelpers) return
+          const items =
+            typeof window.AppHelpers.load === 'function'
+              ? window.AppHelpers.load()
+              : []
+          let it = items && items.length ? items[0] : null
+          if (!it) {
+            // fallback sample (keeps previous visual text)
+            const d = new Date()
+            d.setDate(d.getDate() + 3)
+            it = {
+              name: 'Alice Morgan',
+              date: d.toISOString().slice(0, 10),
+              note: 'Brunch at 11',
+            }
+          }
+          const $card = $('#sampleCard')
+          if (!$card.length) return
+          const initials = (it.name || '')
+            .split(' ')
+            .map((s) => s[0])
+            .slice(0, 2)
+            .join('')
+            .toUpperCase()
+          const color =
+            typeof window.AppHelpers.avatarColor === 'function'
+              ? window.AppHelpers.avatarColor(it.name)
+              : '#ef4444'
+          const days =
+            typeof window.AppHelpers.daysUntil === 'function'
+              ? window.AppHelpers.daysUntil(it.date)
+              : 3
+          const dayLabel =
+            days === 0 ? 'Today' : days === 1 ? 'Tomorrow' : days + ' days'
+          $card.find('.sample-initials').text(initials).css('background', color)
+          $card.find('.sample-name').text(it.name)
+          if (typeof window.AppHelpers.formatShort === 'function') {
+            $card
+              .find('.sample-detail')
+              .text(window.AppHelpers.formatShort(it.date) + ' • ' + dayLabel)
+          } else {
+            $card.find('.sample-detail').text(it.date + ' • ' + dayLabel)
+          }
+        } catch (e) {
+          console.warn('sample card populate failed', e)
+        }
+      })()
+    </script>
+  </body>
+</html>

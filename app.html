@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BrightDay - Your Birthday Board</title>
+    <meta
+      name="description"
+      content="BrightDay birthday reminder board: add, edit, and browse upcoming birthdays."
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="styles/main.css" />
+    <style type="text/tailwindcss" data-teda="tailwind-apply">
+      @layer components {
+        .btn-primary {
+          @apply bg-indigo-600 text-white px-3 py-2 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300;
+        }
+        .btn-secondary {
+          @apply bg-white border border-gray-200 px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-50 focus:outline-none;
+        }
+        .chip {
+          @apply inline-block bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-slate-50 text-slate-800">
+    <header class="bg-white shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 py-4 flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-3 no-underline">
+          <div
+            class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-semibold"
+          >
+            BD
+          </div>
+          <div class="text-sm font-semibold">BrightDay</div>
+        </a>
+        <div class="ml-6 text-sm text-slate-500">Birthday board</div>
+        <div class="ml-auto flex items-center gap-3">
+          <input
+            id="search"
+            aria-label="Search birthdays"
+            class="px-3 py-2 rounded-md border border-gray-200 text-sm w-40 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            placeholder="Search name or note"
+          />
+          <select
+            id="filter"
+            class="px-3 py-2 rounded-md border border-gray-200 text-sm focus:outline-none"
+          >
+            <option value="all">All</option>
+            <option value="this-week">This week</option>
+            <option value="today">Today</option>
+          </select>
+          <button id="btnNew" class="btn-primary">Add Birthday</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+      <div class="grid gap-6 md:grid-cols-3">
+        <!-- Main list (70% visual weight) -->
+        <section class="md:col-span-2 bg-white rounded-2xl p-6 shadow-sm">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold">Upcoming Birthdays</h2>
+            <div class="flex items-center gap-3">
+              <label class="text-sm text-slate-500">Sort</label>
+              <select
+                id="sort"
+                class="px-2 py-1 border border-gray-200 rounded-md"
+              >
+                <option value="soonest">Soonest</option>
+                <option value="name">Name</option>
+              </select>
+            </div>
+          </div>
+
+          <div
+            id="stats"
+            class="mt-4 flex gap-4 text-sm text-slate-600"
+            aria-hidden="true"
+          >
+            <div class="chip">
+              Total: <span id="totalCount" class="ml-2 font-medium">0</span>
+            </div>
+            <div class="chip">
+              This week: <span id="weekCount" class="ml-2 font-medium">0</span>
+            </div>
+            <div class="chip">
+              Today: <span id="todayCount" class="ml-2 font-medium">0</span>
+            </div>
+          </div>
+
+          <div id="list" class="mt-6 space-y-3" aria-live="polite">
+            <!-- Cards inserted here -->
+          </div>
+
+          <div class="mt-6 text-sm text-slate-500">
+            No more birthdays? Use Quick Add to save someone important.
+          </div>
+        </section>
+
+        <!-- Right column: quick add + notes + calendar summary -->
+        <aside class="bg-white rounded-2xl p-6 shadow-sm">
+          <h3 class="font-semibold">Quick Add</h3>
+          <form
+            id="quickForm"
+            class="mt-3 space-y-3"
+            aria-label="Add birthday form"
+          >
+            <div>
+              <label class="text-xs text-slate-600">Name</label>
+              <input
+                id="qName"
+                required
+                class="w-full px-3 py-2 border border-gray-200 rounded-md"
+                placeholder="Full name"
+              />
+            </div>
+            <div>
+              <label class="text-xs text-slate-600">Date</label>
+              <input
+                id="qDate"
+                type="date"
+                required
+                class="w-full px-3 py-2 border border-gray-200 rounded-md"
+              />
+            </div>
+            <div>
+              <label class="text-xs text-slate-600">Note</label>
+              <input
+                id="qNote"
+                class="w-full px-3 py-2 border border-gray-200 rounded-md"
+                placeholder="Optional note"
+              />
+            </div>
+            <div class="flex gap-2">
+              <button type="submit" class="btn-primary">Add</button>
+              <button type="button" id="btnImport" class="btn-secondary">
+                Import sample
+              </button>
+            </div>
+          </form>
+
+          <div class="mt-6">
+            <h4 class="text-sm font-semibold">This Month</h4>
+            <div
+              id="monthList"
+              class="mt-3 space-y-2 text-sm text-slate-600"
+            ></div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <!-- Modal (hidden) -->
+    <div
+      id="modal"
+      role="dialog"
+      aria-modal="true"
+      class="fixed inset-0 bg-black/40 hidden items-center justify-center px-4"
+    >
+      <div class="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
+        <h3 class="text-lg font-semibold">Edit Birthday</h3>
+        <form id="editForm" class="mt-4 space-y-3">
+          <input type="hidden" id="eId" />
+          <div>
+            <label class="text-xs text-slate-600">Name</label>
+            <input
+              id="eName"
+              required
+              class="w-full px-3 py-2 border border-gray-200 rounded-md"
+            />
+          </div>
+          <div>
+            <label class="text-xs text-slate-600">Date</label>
+            <input
+              id="eDate"
+              type="date"
+              required
+              class="w-full px-3 py-2 border border-gray-200 rounded-md"
+            />
+          </div>
+          <div>
+            <label class="text-xs text-slate-600">Note</label>
+            <input
+              id="eNote"
+              class="w-full px-3 py-2 border border-gray-200 rounded-md"
+            />
+          </div>
+          <div class="flex justify-end gap-2 mt-2">
+            <button type="button" id="btnCancelEdit" class="btn-secondary">
+              Cancel
+            </button>
+            <button type="submit" class="btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Scripts: helpers, ui, main (order required) -->
+    <script src="scripts/helpers.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/main.js"></script>
+  </body>
+</html>

@@ -30,3 +30,6 @@ Getting started
 2. Click Open Board to go to app.html and begin adding birthdays.
 
 This project was built by Teda.dev to demonstrate a complete, production-like single-user web app experience.
+
+<!-- Teda Live URL -->
+Live URL: https://e7350.github.io/brightday-birthday-reminder-board/
